@@ -38,7 +38,7 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
     Player playerShip;
     Bullet bullet;
     Bullet [] invadersBullets = new Bullet[200];
-    Bullet nextBullet;
+    int nextBullet;
     int maxInvadersBullets = 10;
 
     Invader [] invaders = new Invader[60];
@@ -125,6 +125,19 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
                 fps = 1000/timeThisFrame;
             }
 
+            if(!paused) {
+                if(startFrameTime - lastMenaceTime > menaceInteval) {
+                    if(uhOrOh)
+                        soundPool.play(uhID,1,1,0,0,1);
+                    else
+                        soundPool.play(ohID,1,1,0,0,1);
+
+                    lastMenaceTime = System.currentTimeMillis();
+                    uhOrOh = !uhOrOh;
+                }
+
+            }
+
         }
 
     }
@@ -140,6 +153,25 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         playerShip.update(fps);
 
         //update invaders
+        for (int i=0; i<numInvaders; i++) {
+            if (invaders[i].getVisibility()){
+                invaders[i].update(fps);
+
+                if(invaders[i].takeAim(playerShip.getX(),playerShip.getLength())){
+                    if(invadersBullets[nextBullet].shoot(invaders[i].getX() + invaders[i].getLength()/2,
+                            invaders[i].getY(), bullet.DOWN)) {
+                        nextBullet++;
+
+                        if (nextBullet == maxInvadersBullets) {
+                            nextBullet = 0;
+                        }
+                    }
+                }
+                if (invaders[i].getX() > screenX - invaders[i].getLength() || invaders[i].getX() < 0) {
+                    bumped = true;
+                }
+            }
+        }
 
         //update player bullet
         if(bullet.getStatus()) {
@@ -153,8 +185,19 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
             }
         }
         //did invader bump
+        if (bumped) {
+            for(int i=0; i<numInvaders; i++) {
+                invaders[i].drop();
+
+                if(invaders[i].getY() > screenY - screenY/8) {
+                    lost = true;
+                }
+            }
+            menaceInteval -= 80;
+        }
 
         if (lost) {
+            paused = true;
             prepareLevel();
         }
 
@@ -191,6 +234,7 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
     }
 
     private void prepareLevel() {
+        numInvaders = 0;
         //initialize game objects
 
         //new player
@@ -205,8 +249,15 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         }
 
         //build Invader army
+        for(int column=0; column<6; column++) {
+            for (int row = 0; row<3; row++) {
+                invaders[numInvaders] = new Invader(context, row, column, screenX, screenY);
+                numInvaders++;
+            }
+        }
 
         //reset menace level
+        menaceInteval = 1000;
 
         //Build shelters
 
@@ -222,6 +273,15 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
             canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - playerShip.getHeight(), paint);
 
             //invaders
+            for(int i=0; i<numInvaders; i++) {
+                if (invaders[i].getVisibility()) {
+                    if (uhOrOh)
+                        canvas.drawBitmap(invaders[i].getBitmap1(), invaders[i].getX(), invaders[i].getY(), paint);
+                    else
+                        canvas.drawBitmap(invaders[i].getBitmap2(), invaders[i].getX(), invaders[i].getY(), paint);
+
+                }
+            }
 
             //bricks
 
