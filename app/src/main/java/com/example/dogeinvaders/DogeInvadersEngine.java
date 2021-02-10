@@ -15,13 +15,13 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-import static java.lang.System.currentTimeMillis;
-
 public class DogeInvadersEngine extends SurfaceView implements Runnable {
 
     private Thread gameThread=null;
 
     private SurfaceHolder ourHolder;
+
+    Context context;
 
     private Canvas canvas;
     private Paint paint;
@@ -35,9 +35,9 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
     private boolean playing;
     private boolean paused = true;
 
-    Player player;
+    Player playerShip;
     Bullet bullet;
-    Bullet [] invadersBullet = new Bullet[200];
+    Bullet [] invadersBullets = new Bullet[200];
     Bullet nextBullet;
     int maxInvadersBullets = 10;
 
@@ -65,6 +65,8 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
 
     public DogeInvadersEngine(Context context, int x, int y) {
         super(context);
+
+        this.context = context;
 
         ourHolder = getHolder();
 
@@ -135,18 +137,26 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         boolean lost = false;
 
         //move player
+        playerShip.update(fps);
 
         //update invaders
 
-        //update invader bullets
+        //update player bullet
+        if(bullet.getStatus()) {
+            bullet.update(fps);
+        }
 
+        //update invader bullets
+        for (int i=0; i<invadersBullets.length; i++) {
+            if(invadersBullets[i].getStatus()) {
+                invadersBullets[i].update(fps);
+            }
+        }
         //did invader bump
 
         if (lost) {
             prepareLevel();
         }
-
-        //update player bullet
 
         //did player bullet hit top of screen
 
@@ -184,10 +194,15 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         //initialize game objects
 
         //new player
+        playerShip = new Player(context, screenX, screenY);
 
         //prepare player bullet
+        bullet = new Bullet(screenY);
 
         //initialize invadersBullets array
+        for (int i = 0; i < invadersBullets.length; i++) {
+            invadersBullets[i] = new Bullet(screenY);
+        }
 
         //build Invader army
 
@@ -204,14 +219,23 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
             canvas.drawColor(Color.argb(255, 26, 128, 182));
 
             //player
+            canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - playerShip.getHeight(), paint);
 
             //invaders
 
             //bricks
 
             //player bullet
+            if (bullet.getStatus()) {
+                canvas.drawRect(bullet.getRect(),paint);
+            }
 
             //invader bullets
+            for (int i=0; i<invadersBullets.length; i++) {
+                if(invadersBullets[i].getStatus()) {
+                    canvas.drawRect(invadersBullets[i].getRect(), paint);
+                }
+            }
 
             //draw HUD
             paint.setColor(Color.argb(255,255,255,255));
@@ -230,10 +254,25 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
 
         switch(motionEvent.getAction() & motionEvent.ACTION_MASK) {
             case MotionEvent.ACTION_DOWN:
+                paused = false;
+
+                if(motionEvent.getY() > screenY - screenY/8) {
+                    if(motionEvent.getX() > screenX/2)
+                        playerShip.setMovementState(playerShip.RIGHT);
+                    else
+                        playerShip.setMovementState(playerShip.LEFT);
+                }
+                else {
+                    if(bullet.shoot(playerShip.getX() + playerShip.getLength()/2, screenY, bullet.UP ))
+                        soundPool.play(shootID, 1, 1, 0, 0, 1);
+                }
 
                 break;
 
             case MotionEvent.ACTION_UP:
+                if (motionEvent.getY() > screenY - screenY/8) {
+                    playerShip.setMovementState(playerShip.STOPPED);
+                }
 
                 break;
         }
