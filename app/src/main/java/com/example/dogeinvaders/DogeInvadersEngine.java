@@ -6,6 +6,8 @@ import android.content.res.AssetManager;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.graphics.Rect;
+import android.graphics.RectF;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
@@ -202,16 +204,83 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         }
 
         //did player bullet hit top of screen
+        if(bullet.getImpactPointY()<= 0)
+            bullet.setInactive();
 
         //did invader bullet hit bottom of screen
+        for(int i=0; i<invadersBullets.length; i++) {
+            if (invadersBullets[i].getImpactPointY() >= screenY)
+                invadersBullets[i].setInactive();
+        }
 
         //did player bullet hit invader
+        if(bullet.getStatus()) {
+            for(int i=0;i<numInvaders;i++) {
+                if(invaders[i].getVisibility()) {
+                    if(RectF.intersects(bullet.getRect(),invaders[i].getRect())) {
+                        bullet.setInactive();
+                        invaders[i].setInvisible();
+                        soundPool.play(invaderExplodeID,1,1,0,0,1);
+                        score += 10;
+
+                        if(score == numInvaders*10) {
+                            paused = true;
+                            score = 0;
+                            lives = 3;
+                            prepareLevel();
+                        }
+                    }
+                }
+            }
+        }
+
 
         //did invader bullet hit shelter
+        for(int i=0; i<invadersBullets.length; i++) {
+            if(invadersBullets[i].getStatus()) {
+                for(int j=0; j<numBricks; j++) {
+                    if(bricks[j].getVisibility()) {
+                        if(RectF.intersects(invadersBullets[i].getRect(), bricks[j].getRect())) {
+                            bricks[j].setInvisible();
+                            invadersBullets[i].setInactive();
+                            soundPool.play(damageShelterID,1,1,0,0,1);
+                        }
+                    }
+                }
+            }
+        }
 
         //did player bullet hit shelter
+        if(bullet.getStatus()) {
+            for(int i=0; i<numBricks; i++) {
+                if(bricks[i].getVisibility()) {
+                    if(RectF.intersects(bullet.getRect(), bricks[i].getRect())) {
+                        bullet.setInactive();
+                        bricks[i].setInvisible();
+                        soundPool.play(damageShelterID,1,1,0,0,1);
+                    }
+                }
+            }
+        }
 
         //did invader bullet hit player
+        for(int i=0; i<invadersBullets.length; i++)
+        {
+            if(invadersBullets[i].getStatus()) {
+                if(RectF.intersects(invadersBullets[i].getRect(), playerShip.getRect())) {
+                    invadersBullets[i].setInactive();
+                    lives--;
+                    soundPool.play(playerExplodeID,1,1,0,0,1);
+
+                    if(lives == 0) {
+                        paused = true;
+                        prepareLevel();
+                        lives = 3;
+                        score = 0;
+                    }
+                }
+            }
+        }
 
     }
 
@@ -260,6 +329,15 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         menaceInteval = 1000;
 
         //Build shelters
+        numBricks = 0;
+        for(int shelterNumber = 0; shelterNumber<4; shelterNumber++) {
+            for(int column=0; column<10; column++) {
+                for(int row=0; row<5; row++){
+                    bricks[numBricks] = new DefenceBrick(row, column, shelterNumber, screenX, screenY);
+                    numBricks++;
+                }
+            }
+        }
 
     }
 
@@ -284,6 +362,11 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
             }
 
             //bricks
+            for(int i=0; i<numBricks; i++) {
+                if (bricks[i].getVisibility()) {
+                    canvas.drawRect(bricks[i].getRect(), paint);
+                }
+            }
 
             //player bullet
             if (bullet.getStatus()) {

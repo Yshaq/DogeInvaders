@@ -13,7 +13,7 @@ public class Bullet {
     public final int DOWN = 1; //movt dirn
 
     int heading = -1;
-    float speed = 350;
+    float speed = 700;
 
     private int width = 1;
     private int height;

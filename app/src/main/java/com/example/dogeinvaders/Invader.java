@@ -51,7 +51,7 @@ public class Invader {
         bitmap1 = Bitmap.createScaledBitmap(bitmap1, (int)length, (int)height, false);
         bitmap2 = Bitmap.createScaledBitmap(bitmap2, (int)length, (int)height, false);
 
-        speed = 120;
+        speed = 80;
         multiplier = 1.18f;
     }
 
