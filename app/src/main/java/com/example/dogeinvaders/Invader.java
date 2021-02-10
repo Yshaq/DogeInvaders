@@ -45,8 +45,8 @@ public class Invader {
         x = column * (length + padding);
         y = row * (length + padding/4);
 
-        bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.invader1);
-        bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.invader2);
+        bitmap1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.catinv1);
+        bitmap2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.catinv2);
 
         bitmap1 = Bitmap.createScaledBitmap(bitmap1, (int)length, (int)height, false);
         bitmap2 = Bitmap.createScaledBitmap(bitmap2, (int)length, (int)height, false);

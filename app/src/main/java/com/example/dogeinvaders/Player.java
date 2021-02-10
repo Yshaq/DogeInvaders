@@ -35,7 +35,7 @@ public class Player {
         x = screenX/2;
         y = screenY-height;
 
-        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.playership);
+        bitmap = BitmapFactory.decodeResource(context.getResources(), R.drawable.dogemobile);
 
         bitmap = Bitmap.createScaledBitmap(bitmap, (int)length, (int)height, false);
 

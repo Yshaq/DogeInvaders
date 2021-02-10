@@ -3,6 +3,8 @@ package com.example.dogeinvaders;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -17,7 +19,7 @@ import android.view.SurfaceView;
 
 import java.io.IOException;
 
-public class DogeInvadersEngine extends SurfaceView implements Runnable {
+public class DogeInvadersEngine<bitmap> extends SurfaceView implements Runnable {
 
     private Thread gameThread=null;
 
@@ -64,6 +66,8 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
     private boolean uhOrOh;
     private long lastMenaceTime = System.currentTimeMillis();
 
+    Bitmap background;
+
 
     public DogeInvadersEngine(Context context, int x, int y) {
         super(context);
@@ -104,6 +108,9 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
         }catch(IOException e) {
             Log.e("error","failed to load sound files");
         }
+
+        background = BitmapFactory.decodeResource(context.getResources(), R.drawable.bhu1);
+        background = Bitmap.createScaledBitmap(background, (int)screenX, (int)screenY, false);
 
         prepareLevel();
     }
@@ -344,8 +351,17 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
     private void draw() {
         if (ourHolder.getSurface().isValid()){
             canvas = ourHolder.lockCanvas();
+            //bricks
+            paint.setColor(Color.argb(255,255,255,255));
+
+            for(int i=0; i<numBricks; i++) {
+                if (bricks[i].getVisibility()) {
+                    canvas.drawRect(bricks[i].getRect(), paint);
+                }
+            }
             //bg
-            canvas.drawColor(Color.argb(255, 26, 128, 182));
+            //canvas.drawColor(Color.argb(255, 26, 128, 182));
+            canvas.drawBitmap(background,0,0, paint);
 
             //player
             canvas.drawBitmap(playerShip.getBitmap(), playerShip.getX(), screenY - playerShip.getHeight(), paint);
@@ -361,12 +377,7 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
                 }
             }
 
-            //bricks
-            for(int i=0; i<numBricks; i++) {
-                if (bricks[i].getVisibility()) {
-                    canvas.drawRect(bricks[i].getRect(), paint);
-                }
-            }
+            paint.setColor(Color.argb(255,0,255,0));
 
             //player bullet
             if (bullet.getStatus()) {
@@ -377,6 +388,14 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
             for (int i=0; i<invadersBullets.length; i++) {
                 if(invadersBullets[i].getStatus()) {
                     canvas.drawRect(invadersBullets[i].getRect(), paint);
+                }
+            }
+
+            //bricks
+            paint.setColor(Color.argb(255,0,100,0));
+            for(int i=0; i<numBricks; i++) {
+                if (bricks[i].getVisibility()) {
+                    canvas.drawRect(bricks[i].getRect(), paint);
                 }
             }
 
@@ -406,7 +425,7 @@ public class DogeInvadersEngine extends SurfaceView implements Runnable {
                         playerShip.setMovementState(playerShip.LEFT);
                 }
                 else {
-                    if(bullet.shoot(playerShip.getX() + playerShip.getLength()/2, screenY, bullet.UP ))
+                    if(bullet.shoot(playerShip.getX() + playerShip.getLength()/2, screenY - screenY/10, bullet.UP ))
                         soundPool.play(shootID, 1, 1, 0, 0, 1);
                 }
 
