@@ -2,6 +2,7 @@ package com.example.dogeinvaders;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
@@ -14,8 +15,10 @@ public class StoryScreen extends AppCompatActivity {
     ImageView speakerImage;
     TextView text;
     Button nextButton;
+    Button dogePlay;
 
     Story story = new Story(this);
+
 
 
     @Override
@@ -26,11 +29,18 @@ public class StoryScreen extends AppCompatActivity {
         speakerImage = (ImageView)findViewById(R.id.speakerImage);
         text = (TextView)findViewById(R.id.mainText);
         nextButton = (Button)findViewById(R.id.nextButton);
+        dogePlay = (Button)findViewById(R.id.dogePlay);
 
         story.starting();
     }
 
     public void button(View view) {
         story.goNext(story.next);
+    }
+
+    public void goToDogeInv(View view)
+    {
+        Intent dogeInv = new Intent(this, DogeInvadersActivity.class);
+        startActivity(dogeInv);
     }
 }

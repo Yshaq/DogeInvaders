@@ -22,6 +22,7 @@
                 android:layout_height="match_parent"
                 android:layout_weight="1"
                 app:srcCompat="@drawable/bhu1o" />
+
         </TableRow>
 
         <TableRow
@@ -53,6 +54,16 @@
                 android:onClick="button"
                 android:text=">"
                 app:backgroundTint="#818181" />
+
+            <Button
+                android:id="@+id/dogePlay"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:onClick="goToDogeInv"
+                android:text="PLAY"
+                android:visibility="gone" />
+
         </TableRow>
 
     </TableLayout>

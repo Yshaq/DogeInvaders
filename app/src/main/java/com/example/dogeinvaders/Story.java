@@ -1,18 +1,17 @@
 package com.example.dogeinvaders;
 
-import android.content.Intent;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
+public class Story {
 
-public class Story extends AppCompatActivity {
     StoryScreen gs;
     String next;
 
 
+
+
     public Story(StoryScreen gs) {
         this.gs = gs;
-
     }
 
     public void goNext(String next) {
@@ -29,9 +28,6 @@ public class Story extends AppCompatActivity {
             case "s10": s10(); break;
             case "s11": s11(); break;
             case "s12": s12(); break;
-            case "startInv":
-                goToDogeInvaders();
-                break;
 
         }
     }
@@ -146,15 +142,12 @@ public class Story extends AppCompatActivity {
 
         gs.text.setText("BRING IT ONN!!");
 
-        next="startInv";
-    }
+        gs.nextButton.setVisibility(View.GONE);
+        gs.dogePlay.setVisibility(View.VISIBLE);
 
-    public void goToDogeInvaders()
-    {
-        Intent dogeInvadersScreen = new Intent(this, DogeInvadersActivity.class);
-        startActivity(dogeInvadersScreen);
-    }
 
+
+    }
 
 
 }
