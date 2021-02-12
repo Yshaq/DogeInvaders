@@ -52,7 +52,7 @@ public class Story {
     }
 
     public void s3(){
-        gs.mainImage.setImageResource(R.drawable.bhu1o);
+        gs.mainImage.setImageResource(R.drawable.burgerbhu);
         gs.speakerImage.setImageResource(R.drawable.doge);
 
         gs.text.setText("And with the Rs. 1 lakh prize money I got from my coaching institute, I bought this mountain of burbgers.");
@@ -61,7 +61,7 @@ public class Story {
     }
 
     public void s4(){
-        gs.mainImage.setImageResource(R.drawable.bhu1o);
+        gs.mainImage.setImageResource(R.drawable.burgerbhu);
         gs.speakerImage.setImageResource(R.drawable.doge);
 
         gs.text.setText("I spent all the money on it, but no worries. I will join COPS and become OP coder, and I will get 1 crore placement" +
