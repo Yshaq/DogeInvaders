@@ -1,6 +1,6 @@
 # DogeInvaders
 
-A twist on the classic doge invaders game.
+A twist on the classic space invaders game.
 
 DOWNLOAD THE APK TO PLAY ON YOUR MOBILE! : https://drive.google.com/file/d/14aPswowRiagkBl4-g6I4Ubynaz9isVBV/view
 
