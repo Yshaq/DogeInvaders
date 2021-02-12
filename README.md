@@ -2,6 +2,8 @@
 
 A twist on the classic doge invaders game.
 
+DOWNLOAD THE APK TO PLAY ON YOUR MOBILE! : https://drive.google.com/file/d/14aPswowRiagkBl4-g6I4Ubynaz9isVBV/view
+
 CONTROLS:
 To move left and right, touch on the corresponding side near the bottom of the screen
 To shoot, touch anywhere else on the screen. (Just like the classic space invaders, only one bullet can be fired at a time)
