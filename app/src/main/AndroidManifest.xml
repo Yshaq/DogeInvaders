@@ -9,7 +9,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.DogeInvaders">
-        <activity android:name=".TitleScreen"
+        <activity android:name=".StoryScreen"
+            android:screenOrientation="landscape">
+
+        </activity>
+        <activity
+            android:name=".TitleScreen"
             android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -19,4 +19,10 @@ public class TitleScreen extends AppCompatActivity {
         Intent dogeInvadersScreen = new Intent(this, DogeInvadersActivity.class);
         startActivity(dogeInvadersScreen);
     }
+
+    public void goToStoryScreen(View view)
+    {
+        Intent storyScreen = new Intent(this, StoryScreen.class);
+        startActivity(storyScreen);
+    }
 }
