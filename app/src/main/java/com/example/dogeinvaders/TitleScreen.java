@@ -14,11 +14,6 @@ public class TitleScreen extends AppCompatActivity {
         setContentView(R.layout.activity_title_screen);
     }
 
-    public void goToDogeInvaders(View view)
-    {
-        Intent dogeInvadersScreen = new Intent(this, DogeInvadersActivity.class);
-        startActivity(dogeInvadersScreen);
-    }
 
     public void goToStoryScreen(View view)
     {
